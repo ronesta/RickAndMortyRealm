@@ -13,6 +13,8 @@
 		E173C00D2CD7E2D300B56507 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E173C00C2CD7E2D300B56507 /* Assets.xcassets */; };
 		E173C0102CD7E2D300B56507 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E173C00E2CD7E2D300B56507 /* LaunchScreen.storyboard */; };
 		E173C0192CD7E30000B56507 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E173C0182CD7E30000B56507 /* SnapKit */; };
+		E173C01B2CD7E3B700B56507 /* CharacterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E173C01A2CD7E3B700B56507 /* CharacterTableViewCell.swift */; };
+		E173C01D2CD7E3C500B56507 /* CustomUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E173C01C2CD7E3C500B56507 /* CustomUILabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		E173C00C2CD7E2D300B56507 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E173C00F2CD7E2D300B56507 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E173C0112CD7E2D300B56507 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E173C01A2CD7E3B700B56507 /* CharacterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCell.swift; sourceTree = "<group>"; };
+		E173C01C2CD7E3C500B56507 /* CustomUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUILabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				E173C0032CD7E2D100B56507 /* AppDelegate.swift */,
 				E173C0052CD7E2D100B56507 /* SceneDelegate.swift */,
 				E173C0072CD7E2D100B56507 /* ViewController.swift */,
+				E173C01A2CD7E3B700B56507 /* CharacterTableViewCell.swift */,
+				E173C01C2CD7E3C500B56507 /* CustomUILabel.swift */,
 				E173C00C2CD7E2D300B56507 /* Assets.xcassets */,
 				E173C00E2CD7E2D300B56507 /* LaunchScreen.storyboard */,
 				E173C0112CD7E2D300B56507 /* Info.plist */,
@@ -144,7 +150,9 @@
 			files = (
 				E173C0082CD7E2D100B56507 /* ViewController.swift in Sources */,
 				E173C0042CD7E2D100B56507 /* AppDelegate.swift in Sources */,
+				E173C01D2CD7E3C500B56507 /* CustomUILabel.swift in Sources */,
 				E173C0062CD7E2D100B56507 /* SceneDelegate.swift in Sources */,
+				E173C01B2CD7E3B700B56507 /* CharacterTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
