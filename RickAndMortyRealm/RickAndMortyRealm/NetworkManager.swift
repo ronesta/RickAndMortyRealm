@@ -7,40 +7,39 @@
 
 import Foundation
 
-final class NetworkManager {
+class NetworkManager {
     static let shared = NetworkManager()
     private init() {}
 
-    private let urlString = "https://rickandmortyapi.com/api/character"
+    let urlString = "https://rickandmortyapi.com/api/character"
 
-    func getCharacters(completion: @escaping (Result<[Character], Error>) -> Void) {
+    func getCharacters(completion: @escaping ([Character]?, Error?) -> Void) {
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
-            completion(.failure(NetworkError.invalidURL))
+            completion(nil, NetworkError.invalidURL)
             return
         }
 
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error {
                 print("Error: \(error.localizedDescription)")
-                completion(.failure(error))
+                completion(nil, error)
                 return
             }
 
             guard let data else {
                 print("No data")
-                completion(.failure(NetworkError.noData))
+                completion(nil, NetworkError.noData)
                 return
             }
 
             do {
-                let character = try JSONDecoder().decode(PostCharacters.self, from: data)
-                completion(.success(character.results))
+                let characters = try JSONDecoder().decode(PostCharacters.self, from: data)
+                completion(characters.results, nil)
             } catch {
                 print("Decoding error: \(error.localizedDescription)")
-                completion(.failure(error))
+                completion(nil, error)
             }
         }.resume()
     }
 }
-

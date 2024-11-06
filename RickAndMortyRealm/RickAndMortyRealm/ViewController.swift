@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         return tableView
     }()
 
-    var characters = [Character]()
+    var characters = [RealmCharacter]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,22 +45,46 @@ class ViewController: UIViewController {
     }
 
     private func getCharacters() {
-        if let savedCharacters = StorageManager.shared.loadCharacters() {
-            characters = savedCharacters
-            tableView.reloadData()
+        self.characters = StorageManager.shared.fetchCharacters()
+
+        guard self.characters.isEmpty else {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
             return
         }
 
-        NetworkManager.shared.getCharacters { [weak self] result in
-            switch result {
-            case .success(let character):
-                DispatchQueue.main.async {
-                    self?.characters = character
-                    self?.tableView.reloadData()
-                    StorageManager.shared.saveCharacters(character)
+        NetworkManager.shared.getCharacters { [weak self] result, error in
+            if let error {
+                print("Error getting characters: \(error)")
+                return
+            }
+
+            guard let result else {
+                return
+            }
+
+            var charactersToSave: [(character: Character, imageData: Data)] = []
+
+            result.forEach { res in
+                guard let url = URL(string: res.image) else {
+                    print("Invalid URL for character image")
+                    return
                 }
-            case .failure(let error):
-                print("Failed to fetch drinks: \(error.localizedDescription)")
+
+                do {
+                    let imageData = try Data(contentsOf: url)
+                    charactersToSave.append((character: res, imageData: imageData))
+                } catch {
+                    print("Failed to load image data: \(error)")
+                }
+            }
+
+            StorageManager.shared.saveCharacters(charactersToSave)
+
+            DispatchQueue.main.async {
+                self?.characters = StorageManager.shared.fetchCharacters()
+                self?.tableView.reloadData()
             }
         }
     }
@@ -79,16 +103,13 @@ extension ViewController: UITableViewDataSource {
         }
 
         let character = characters[indexPath.row]
-        let imageURL = character.image
 
-        ImageLoader.shared.loadImage(from: imageURL) { loadedImage in
-            DispatchQueue.main.async {
-                guard let cell = tableView.cellForRow(at: indexPath) as? CharacterTableViewCell  else {
-                    return
-                }
-                cell.configure(with: character, image: loadedImage)
-            }
+        guard let imageData = StorageManager.shared.fetchImageData(forCharacterId: character.id),
+              let image = UIImage(data: imageData) else {
+            return cell
         }
+
+        cell.configure(with: character, image: image)
 
         return cell
     }
