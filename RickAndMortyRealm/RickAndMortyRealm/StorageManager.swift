@@ -17,10 +17,15 @@ class StorageManager: NSObject {
     }
 
     private var realm: Realm {
-        return try! Realm()
+        do {
+            return try Realm()
+        } catch {
+            fatalError("Failed to initialize Realm: \(error.localizedDescription)")
+        }
     }
 
-    public func createOrUpdateCharacter(id: Int64,
+    // swiftlint:disable:next function_parameter_count
+    public func createOrUpdateCharacter(id: Int,
                                         gender: String,
                                         image: String,
                                         location: String,
@@ -48,24 +53,17 @@ class StorageManager: NSObject {
     }
 
     func saveCharacters(_ characters: [(character: Character, imageData: Data?)]) {
-        do {
-            try realm.write {
-                for (character, imageData) in characters {
-                    let realmCharacter = RealmCharacter()
-                    realmCharacter.id = Int64(character.id)
-                    realmCharacter.gender = character.gender
-                    realmCharacter.image = character.image
-                    realmCharacter.location = character.location.name
-                    realmCharacter.name = character.name
-                    realmCharacter.species = character.species
-                    realmCharacter.status = character.status
-                    realmCharacter.imageData = imageData
-
-                    realm.add(realmCharacter, update: .modified)
-                }
-            }
-        } catch {
-            print("Error saving characters: \(error)")
+        for (character, imageData) in characters {
+            createOrUpdateCharacter(
+                id: character.id,
+                gender: character.gender,
+                image: character.image,
+                location: character.location.name,
+                name: character.name,
+                species: character.species,
+                status: character.status,
+                imageData: imageData
+            )
         }
     }
 
@@ -73,10 +71,7 @@ class StorageManager: NSObject {
         return Array(realm.objects(RealmCharacter.self))
     }
 
-    func fetchImageData(forCharacterId id: Int64) -> Data? {
-        if let realmCharacter = realm.object(ofType: RealmCharacter.self, forPrimaryKey: id) {
-            return realmCharacter.imageData
-        }
-        return nil
+    func fetchImageData(forCharacterId id: Int) -> Data? {
+        realm.object(ofType: RealmCharacter.self, forPrimaryKey: id)?.imageData
     }
 }

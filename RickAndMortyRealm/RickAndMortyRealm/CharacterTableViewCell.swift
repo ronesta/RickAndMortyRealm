@@ -191,4 +191,3 @@ final class CharacterTableViewCell: UITableViewCell {
         }
     }
 }
-
